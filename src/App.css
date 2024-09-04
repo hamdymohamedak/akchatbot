@@ -25,18 +25,6 @@
   border-bottom: 1px solid #ddd;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
-
-/* Chat header styling */
-.chat-header {
-  flex: 0.3;
-  padding: 1rem;
-  overflow-y: auto;
-  background: #f7f7f7;
-  display: flex;
-  flex-direction: column;
-  border-bottom: 1px solid #ddd;
-}
-
 /* User Avatar styling */
 .userAvatar {
   display: flex;
