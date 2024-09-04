@@ -9,14 +9,15 @@ import {
   useColorScheme,
   RandomAnimate,
   useOnlineStatus,
+  useLocalStorage,
 } from "./LaRose";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import "./App.css";
-
-// Ensure the API key is stored securely in environment variables
+import Avatar from "./Avatar.png";
 const API_KEY = "AIzaSyAWOETDeqZyrTanHs7hClr_t698-3WgR_Q";
+
 const ChatApp = () => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useLocalStorage("chatMessages", []); // Use useLocalStorage to persist chat messages
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
@@ -46,20 +47,13 @@ const ChatApp = () => {
     }
   }, [messages]);
 
-  const { level, charging } = useBatteryStatus();
-
-  useEffect(() => {
-    if (level < 0.6) {
-      setBatteryMessage("Your battery level is low");
-    } else {
-      setBatteryMessage("");
-    }
-  }, [level]);
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (newMessage.trim() !== "" && genAI) {
-      setMessages([...messages, { sender: "user", text: newMessage }]);
+      // Add user message to state and localStorage
+      const newMessages = [...messages, { sender: "user", text: newMessage }];
+      setMessages(newMessages);
+
       setLoading(true);
 
       try {
@@ -70,25 +64,36 @@ const ChatApp = () => {
         const aiText = response?.response?.text
           ? response.response.text()
           : "Sorry, I didn't understand that.";
-        setMessages((prevMessages) => [
-          ...prevMessages,
+
+        // Add AI response to state and localStorage
+        const updatedMessages = [
+          ...newMessages,
           { sender: "ai", text: aiText },
-        ]);
+        ];
+        setMessages(updatedMessages);
       } catch (error) {
         console.error("Error getting response from Generative AI:", error);
-        setMessages((prevMessages) => [
-          ...prevMessages,
+
+        // Add error message to state and localStorage
+        const errorMessages = [
+          ...newMessages,
           {
             sender: "ai",
             text: "Sorry, something went wrong. Please try again.",
           },
-        ]);
+        ];
+        setMessages(errorMessages);
       } finally {
         setLoading(false);
       }
 
       setNewMessage("");
     }
+  };
+
+  const handleRemoveMessage = (index) => {
+    const updatedMessages = messages.filter((_, i) => i !== index);
+    setMessages(updatedMessages); // Remove a specific message
   };
 
   const preferredLanguage = usePreferredLanguage();
@@ -99,20 +104,39 @@ const ChatApp = () => {
     document.body.style.backgroundColor =
       colorTheme === "dark" ? "black" : "transparent";
   }, [colorTheme]);
+
   const isOnline = useOnlineStatus();
+
   return (
     <div className="chat-app" dir={textDirection}>
-      <div className="title">
-        LaRose-ChatBot
-      </div>
-      <RoseBox edit={{ height: "5rem", width: "20rem" }} />
       <div className="chat-header">
+        <div className="header-left">
+          <div className="header-info"></div>
+        </div>
+        <div className="userAvatar">
+          {" "}
+          <img
+            src={Avatar} // Replace with your avatar image URL
+            alt={Avatar}
+            className="avatar"
+          />
+          <RoseBox edit={{ color: "black", fontWeight: "bold" }}>
+            LaRose ChatBot{" "}
+          </RoseBox>{" "}
+          <div style={{ margin: "1rem", color: "green" }} className="status">
+            {isOnline ? "Online" : "Offline"}
+          </div>
+        </div>
+      </div>
+
+      <div className="chat-body">
         <div style={{ fontSize: "1.2rem", textAlign: "start" }}>
           {messages.map((message, index) => (
             <div key={index} className={`message ${message.sender}`}>
               <RandomAnimate edit={{ all: "none" }}>
                 {message.text}
               </RandomAnimate>
+              <button className="RemoveBtn" onClick={() => handleRemoveMessage(index)}>Remove</button>
             </div>
           ))}
           {loading && (
@@ -121,8 +145,6 @@ const ChatApp = () => {
             </div>
           )}
         </div>
-      </div>
-      <div className="chat-body">
         <div ref={messagesEndRef} />
       </div>
       <form onSubmit={handleSubmit} className="chat-input">
