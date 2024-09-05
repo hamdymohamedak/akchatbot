@@ -22,7 +22,6 @@ const ChatApp = () => {
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
   const [genAI, setGenAI] = useState(null);
-  const [batteryMessage, setBatteryMessage] = useState("");
 
   useEffect(() => {
     const initGenerativeAI = async () => {
@@ -47,11 +46,27 @@ const ChatApp = () => {
     }
   }, [messages]);
 
+  // Function to get the current time in AM/PM format
+  const getCurrentTime = () => {
+    const date = new Date();
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12; // Convert 24h to 12h format, with 12 instead of 0
+    const formattedTime = `${hours}:${minutes < 10 ? `0${minutes}` : minutes} ${ampm}`;
+    return formattedTime;
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (newMessage.trim() !== "" && genAI) {
-      // Add user message to state and localStorage
-      const newMessages = [...messages, { sender: "user", text: newMessage }];
+      const messageTime = getCurrentTime(); // Get current time when message is sent
+
+      // Add user message to state and localStorage with the timestamp
+      const newMessages = [
+        ...messages,
+        { sender: "user", text: newMessage, time: messageTime },
+      ];
       setMessages(newMessages);
 
       setLoading(true);
@@ -60,26 +75,25 @@ const ChatApp = () => {
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }); // Ensure correct model ID
         const response = await model.generateContent(newMessage);
 
-        // Ensure the response has the expected structure
         const aiText = response?.response?.text
           ? response.response.text()
           : "Sorry, I didn't understand that.";
 
-        // Add AI response to state and localStorage
+        // Add AI response to state and localStorage with the timestamp
         const updatedMessages = [
           ...newMessages,
-          { sender: "ai", text: aiText },
+          { sender: "ai", text: aiText, time: getCurrentTime() },
         ];
         setMessages(updatedMessages);
       } catch (error) {
         console.error("Error getting response from Generative AI:", error);
 
-        // Add error message to state and localStorage
         const errorMessages = [
           ...newMessages,
           {
             sender: "ai",
             text: "Sorry, something went wrong. Please try again.",
+            time: getCurrentTime(),
           },
         ];
         setMessages(errorMessages);
@@ -93,7 +107,7 @@ const ChatApp = () => {
 
   const handleRemoveMessage = (index) => {
     const updatedMessages = messages.filter((_, i) => i !== index);
-    setMessages(updatedMessages); // Remove a specific message
+    setMessages(updatedMessages);
   };
 
   const preferredLanguage = usePreferredLanguage();
@@ -132,11 +146,18 @@ const ChatApp = () => {
       <div className="chat-body">
         <div style={{ fontSize: "1.2rem", textAlign: "start" }}>
           {messages.map((message, index) => (
-            <div key={index} className={`message ${message.sender}`}>
+            <div id="SMS" key={index} className={`message ${message.sender}`}>
               <RandomAnimate edit={{ all: "none" }}>
                 {message.text}
+                {"  "}
+                <span className="message-time"> {message.time}</span>
               </RandomAnimate>
-              <button className="RemoveBtn" onClick={() => handleRemoveMessage(index)}>Remove</button>
+              <button
+                className="RemoveBtn"
+                onClick={() => handleRemoveMessage(index)}
+              >
+                Remove
+              </button>
             </div>
           ))}
           {loading && (

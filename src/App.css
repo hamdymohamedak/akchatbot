@@ -1,8 +1,8 @@
 .chat-app {
   display: flex;
   flex-direction: column;
-  height: 95dvh;
-  width: 100dvw;
+  height: 100vh;
+  width: 100vw;
   margin: auto;
   border: 1px solid #ccc;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -25,6 +25,8 @@
   border-bottom: 1px solid #ddd;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
+
+
 /* User Avatar styling */
 .userAvatar {
   display: flex;
@@ -168,7 +170,6 @@
   color: red;
   background: transparent;
   font-weight: bold;
-  margin-left: 1rem;
   border: none;
   border-radius: 10px;
   height: 2rem;
@@ -177,4 +178,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+#SMS{
+  position: relative;
+}
+.message-time{
+  position: absolute;
+  bottom: 10%;
+  right: 3%;
 }
