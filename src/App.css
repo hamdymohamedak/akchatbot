@@ -46,7 +46,7 @@
 
 /* Chat body where messages are displayed */
 .chat-body {
-  flex: 1;
+  flex: 0.9;
   display: flex;
   flex-direction: column;
   padding: 0.5rem;
