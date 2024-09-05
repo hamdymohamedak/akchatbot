@@ -10,7 +10,7 @@ AkChatbot is an advanced AI chatbot application designed to deliver intelligent,
 
 ## Live Demo
 
-You can try out AkChatbot [here](https://AkChatbot.vercel.app).
+You can try out AkChatbot [here](https://larosechatbot.vercel.app).
 
 ## Getting Started
 
