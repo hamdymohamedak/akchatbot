@@ -12,14 +12,14 @@ import {
   useLocalStorage,
   useUserCountry,
   useContinentContent,
+  usePhotoCapture,
 } from "./LaRose";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import "./App.css";
 import Avatar from "./Avatar.png";
 import settingIcon from "./setting.svg";
-
+import CameraIcon from "./CameraIcon.svg";
 const API_KEY = "AIzaSyAWOETDeqZyrTanHs7hClr_t698-3WgR_Q";
-
 const ChatApp = () => {
   const [messages, setMessages] = useLocalStorage("chatMessages", []); // Use useLocalStorage to persist chat messages
   const [newMessage, setNewMessage] = useState("");
@@ -28,7 +28,9 @@ const ChatApp = () => {
   const [genAI, setGenAI] = useState(null);
   const longPressDuration = 500; // Time in ms to determine a long press
   const [detailsOpen, setDetailsOpen] = useState(false); // State to track the details toggle
-
+  const { takePhoto, photo, videoRef, canvasRef, cameraError } =
+    usePhotoCapture();
+  const [CameraIconAction, setCameraIconAction] = useState("none");
   useEffect(() => {
     const initGenerativeAI = async () => {
       if (API_KEY) {
@@ -157,6 +159,14 @@ const ChatApp = () => {
     return <p>Error: {error}</p>;
   }
 
+  let handleToggleCameraIconActions = () => {
+    if (CameraIconAction === "none") {
+      setCameraIconAction("block");
+    }
+    if (CameraIconAction === "block") {
+      setCameraIconAction("none");
+    }
+  };
   return (
     <div className="chat-app" dir={textDirection}>
       <div className="chat-header">
@@ -177,13 +187,12 @@ const ChatApp = () => {
             <summary>
               <img className="settingIcon" src={settingIcon} />
             </summary>
-            {/* Content for More */}
-            {/* Soon */}
-            {/* <div className="detailesContent">
-              <div>information</div>
-              <div>profile</div>
-            </div> */}  
-            {/* Soon */}
+          </details>
+          <details onClick={handleToggleCameraIconActions}>
+            <summary>
+              {/* Camera Icon */}
+              <img className="settingIcon" src={CameraIcon} />
+            </summary>
           </details>
         </div>
       </div>
@@ -255,6 +264,24 @@ const ChatApp = () => {
           </div>
         </RoseBox>
       )}
+      {/* Take Photo POPAP */}
+
+      <div>
+        {cameraError ? (
+          <p>{cameraError}</p>
+        ) : (
+          <>
+            <div className="videoMask">
+              <video
+                style={{ display: CameraIconAction }}
+                className="TakeVideo"
+                ref={videoRef}
+              />
+            </div>
+          </>
+        )}
+      </div>
+      {/* Take Photo POPAP */}
     </div>
   );
 };

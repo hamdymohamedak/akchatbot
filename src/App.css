@@ -209,6 +209,9 @@
 .header-right {
   text-align: right;
   padding-right: 3rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
 }
 
 summary {
@@ -237,7 +240,7 @@ summary::-webkit-details-marker {
   border-radius: 14px;
 }
 
-.infopop{
+.infopop {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -249,3 +252,25 @@ summary::-webkit-details-marker {
   text-align: center;
   gap: 1rem;
 }
+
+
+.videoMask{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 15rem;
+  width: 20rem;
+  border-radius: 20px;
+  overflow: hidden;
+  translate: -50% -50%;
+}
+.TakeVideo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  height: 20rem;
+  width: 20rem;
+  border-radius: 20px;
+}
+
