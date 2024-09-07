@@ -10,7 +10,7 @@ AkChatbot is an advanced AI chatbot application designed to deliver intelligent,
 
 ## Live Demo
 
-You can try out AkChatbot [here](https://AkChatbot.vercel.app).
+You can try out AkChatbot [here](https://ak-chatbot.vercel.app).
 
 ## Getting Started
 
@@ -50,13 +50,6 @@ Make sure you have the following installed:
 
 Once the development server is running, you can interact with the chatbot directly in your browser. Customize the bot's responses and behavior by editing the relevant components and state management files.
 
-## Configuration
-
-To configure various aspects of AkChatbot, you can modify the following files:
-
-- `src/components/Chatbot.js`: Main chatbot component.
-- `src/hooks/useChatbot.js`: Custom hooks for managing chatbot state and logic.
-- `src/styles/`: Folder containing styling files for LaRose animations.
 
 ## Contributing
 
@@ -75,8 +68,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 If you have any questions or need further assistance, please feel free to reach out:
 
-- **Email:** your.email@example.com
-- **Twitter:** [@yourtwitterhandle](https://twitter.com/yourtwitterhandle)
+- **Email:** mohameddhamdy407@gmail.com
 
 ## Acknowledgements
 
