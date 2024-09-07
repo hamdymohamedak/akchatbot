@@ -45,6 +45,9 @@ section {
   border-radius: 10px;
 }
  
+details{
+  position: relative;
+}
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: rgb(0, 119, 255); 

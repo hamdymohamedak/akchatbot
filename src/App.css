@@ -26,7 +26,6 @@
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
-
 /* User Avatar styling */
 .userAvatar {
   display: flex;
@@ -34,6 +33,7 @@
   padding: 1rem;
   border-bottom: 1px solid #ddd;
   background: #fff;
+  justify-content: space-around;
 }
 
 .userAvatar img {
@@ -53,7 +53,6 @@
   background: #fff;
   overflow-y: auto;
 }
-
 /* Chat messages styling */
 .message {
   margin-bottom: 1rem;
@@ -166,7 +165,7 @@
   width: 24rem;
 }
 
-.RemoveBtn {
+/* .RemoveBtn {
   color: red;
   background: transparent;
   font-weight: bold;
@@ -178,12 +177,75 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
-#SMS{
+} */
+#SMS {
   position: relative;
 }
-.message-time{
+.message-time {
+  width: 100%;
+  text-align: end;
+}
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f1f1f1;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  padding-left: 3rem;
+}
+
+.header-left .avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.header-right {
+  text-align: right;
+  padding-right: 3rem;
+}
+
+summary {
+  list-style-type: none; /* Firefox */
+}
+
+summary::-webkit-details-marker {
+  display: none; /* Chrome */
+}
+.settingIcon {
+  height: 2rem;
+}
+
+.detailesContent {
   position: absolute;
-  bottom: 10%;
-  right: 3%;
+  height: 10rem;
+  width: 9rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1.1rem;
+  margin-top: 3rem;
+  background: blue;
+  right: 2%;
+  border-radius: 14px;
+}
+
+.infopop{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  display: flex;
+  flex-direction: column;
+  min-height: 15rem;
+  width: 20rem;
+  text-align: center;
+  gap: 1rem;
 }

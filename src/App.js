@@ -10,10 +10,14 @@ import {
   RandomAnimate,
   useOnlineStatus,
   useLocalStorage,
+  useUserCountry,
+  useContinentContent,
 } from "./LaRose";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import "./App.css";
 import Avatar from "./Avatar.png";
+import settingIcon from "./setting.svg";
+
 const API_KEY = "AIzaSyAWOETDeqZyrTanHs7hClr_t698-3WgR_Q";
 
 const ChatApp = () => {
@@ -22,6 +26,8 @@ const ChatApp = () => {
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
   const [genAI, setGenAI] = useState(null);
+  const longPressDuration = 500; // Time in ms to determine a long press
+  const [detailsOpen, setDetailsOpen] = useState(false); // State to track the details toggle
 
   useEffect(() => {
     const initGenerativeAI = async () => {
@@ -53,7 +59,9 @@ const ChatApp = () => {
     const minutes = date.getMinutes();
     const ampm = hours >= 12 ? "PM" : "AM";
     hours = hours % 12 || 12; // Convert 24h to 12h format, with 12 instead of 0
-    const formattedTime = `${hours}:${minutes < 10 ? `0${minutes}` : minutes} ${ampm}`;
+    const formattedTime = `${hours}:${
+      minutes < 10 ? `0${minutes}` : minutes
+    } ${ampm}`;
     return formattedTime;
   };
 
@@ -110,6 +118,21 @@ const ChatApp = () => {
     setMessages(updatedMessages);
   };
 
+  const handleLongPress = (index) => {
+    handleRemoveMessage(index);
+  };
+
+  let timer;
+  const handleTouchStart = (index) => {
+    timer = setTimeout(() => {
+      handleLongPress(index);
+    }, longPressDuration);
+  };
+
+  const handleTouchEnd = () => {
+    clearTimeout(timer);
+  };
+
   const preferredLanguage = usePreferredLanguage();
   const textDirection = preferredLanguage === "ar" ? "rtl" : "ltr";
 
@@ -121,43 +144,66 @@ const ChatApp = () => {
 
   const isOnline = useOnlineStatus();
 
+  // Battery Level
+  const { level, charging } = useBatteryStatus();
+
+  // UserCountry
+  const { country, error } = useUserCountry();
+
+  // useUserContinent
+  const { continent } = useContinentContent(); // Move this hook outside the conditional
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
   return (
     <div className="chat-app" dir={textDirection}>
       <div className="chat-header">
         <div className="header-left">
-          <div className="header-info"></div>
-        </div>
-        <div className="userAvatar">
-          {" "}
           <img
             src={Avatar} // Replace with your avatar image URL
-            alt={Avatar}
+            alt="Avatar"
             className="avatar"
           />
           <RoseBox edit={{ color: "black", fontWeight: "bold" }}>
-            LaRose ChatBot{" "}
-          </RoseBox>{" "}
-          <div style={{ margin: "1rem", color: "green" }} className="status">
-            {isOnline ? "Online" : "Offline"}
-          </div>
+            LaRose ChatBot <span>{isOnline ? " Online " : " Offline "}</span>
+          </RoseBox>
+        </div>
+        <div className="header-right">
+          <details
+            onToggle={() => setDetailsOpen((prev) => !prev)} // Toggle state on details open/close
+          >
+            <summary>
+              <img className="settingIcon" src={settingIcon} />
+            </summary>
+            {/* Content for More */}
+            {/* Soon */}
+            {/* <div className="detailesContent">
+              <div>information</div>
+              <div>profile</div>
+            </div> */}  
+            {/* Soon */}
+          </details>
         </div>
       </div>
 
       <div className="chat-body">
         <div style={{ fontSize: "1.2rem", textAlign: "start" }}>
           {messages.map((message, index) => (
-            <div id="SMS" key={index} className={`message ${message.sender}`}>
+            <div
+              onDoubleClick={() => handleRemoveMessage(index)}
+              onTouchStart={() => handleTouchStart(index)}
+              onTouchEnd={handleTouchEnd}
+              id="SMS"
+              key={index}
+              className={`message ${message.sender}`}
+            >
               <RandomAnimate edit={{ all: "none" }}>
                 {message.text}
                 {"  "}
-                <span className="message-time"> {message.time}</span>
               </RandomAnimate>
-              <button
-                className="RemoveBtn"
-                onClick={() => handleRemoveMessage(index)}
-              >
-                Remove
-              </button>
+              <div className="message-time"> {message.time}</div>
             </div>
           ))}
           {loading && (
@@ -185,6 +231,30 @@ const ChatApp = () => {
           </ShinyText>
         </ShinyButton>
       </form>
+
+      {/* Conditional pop-up based on details open state */}
+      {detailsOpen && (
+        <RoseBox RoseName="infopop" autoLayout AutoHandling>
+          <div>Your Country is: {country}</div>
+          <div>
+            Your continent is {continent || "Determining your location..."}
+          </div>
+          <div>
+            Battery:{" "}
+            {level !== null ? (
+              <div>
+                <p>Battery Level: {Math.round(level * 100)}%</p>
+                <p>{charging ? "Charging" : "Not Charging"}</p>
+              </div>
+            ) : (
+              <p>
+                Battery Status API not supported or unable to retrieve battery
+                status.
+              </p>
+            )}
+          </div>
+        </RoseBox>
+      )}
     </div>
   );
 };
