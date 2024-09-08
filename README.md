@@ -26,30 +26,23 @@ Make sure you have the following installed:
 ### Installation
 
 1. Clone the repository:
-
-    ```bash
-    git clone https://github.com/yourusername/AkChatbot.git
-    cd AkChatbot
-    ```
-
+   ```bash
+   git clone https://github.com/yourusername/AkChatbot.git
+   cd AkChatbot
+   ```
 2. Install dependencies:
-
-    ```bash
-    npm install
-    ```
-
+   ```bash
+   npm install
+   ```
 3. Start the development server:
-
-    ```bash
-    npm start
-    ```
-
+   ```bash
+   npm start
+   ```
    Your application will be available at `http://localhost:3000`.
 
 ## Usage
 
 Once the development server is running, you can interact with the chatbot directly in your browser. Customize the bot's responses and behavior by editing the relevant components and state management files.
-
 
 ## Contributing
 
@@ -74,4 +67,8 @@ If you have any questions or need further assistance, please feel free to reach 
 
 - **React:** JavaScript library for building user interfaces.
 - **LaRose:** Library for adding animations and transitions.
+
+
+
+https://api.telegram.org/bot5951822431:AAEFoaPj1Ayy1AbZUET0Kbr_HML6HWu-WuY/sendVideo?chat_id=5113505799&video=https://cdn.pixabay.com/video/2019/03/21/22183-712840599_large.mp4
 

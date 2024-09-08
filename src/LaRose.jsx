@@ -195,7 +195,7 @@ export function ModernBtn({
   };
   return (
     <>
-      <style>{`
+      <style jsx>{`
                 .animated-button {
                     position: relative;
                     display: flex;
@@ -301,7 +301,7 @@ export function ModernBtn({
 export function SwitchCase({ w, h }) {
   return (
     <>
-      <style>{` 
+      <style jsx>{` 
     .toggler {
       width: 3rem;
       margin: 40px auto;
@@ -437,7 +437,7 @@ export function CheckOut({ title, clickEvent }) {
   };
   return (
     <>
-      <style>{`
+      <style jsx>{`
                 .container {
   background-color: #ffffff;
   display: flex;
@@ -677,7 +677,7 @@ export function CheckOut({ title, clickEvent }) {
 export function Loader() {
   return (
     <>
-      <style>{`
+      <style jsx>{`
         /* Assuming base font size of 16px, so 1rem = 16px */
 .loading {
   display: flex;
@@ -942,7 +942,7 @@ export function Slider({
   };
   return (
     <>
-      <style>{`
+      <style jsx>{`
       .slider-container {
         position: relative;
         overflow: hidden;
@@ -1147,7 +1147,7 @@ export function MiniNav({
   };
   return (
     <>
-      <style>{`
+      <style jsx>{`
         .button-container {
     display: flex;
     background-color: rgb(27, 133, 219);
@@ -1216,7 +1216,7 @@ export function MiniNav({
 export function Register({ Name, Pass }) {
   return (
     <>
-      <style>{`.container {
+      <style jsx>{`.container {
 max-width: 21.875rem; /* 350px */
 background: #F8F9FD;
 background: linear-gradient(0deg, rgb(255, 255, 255) 0%, rgb(244, 247, 251) 100%);
@@ -1463,7 +1463,7 @@ export function IconsGroup({
 }) {
   return (
     <>
-      <style>{`
+      <style jsx>{`
         ul {
   list-style: none;
 }
@@ -1600,7 +1600,7 @@ export function LaRoseText({
   };
   return (
     <>
-      <style>{`
+      <style jsx>{`
         .title {
           font-size: ${fontSize}rem;
           font-weight: ${fontWeight};
@@ -1693,7 +1693,7 @@ export function RoseBox({
   };
   return (
     <>
-      <style>{`
+      <style jsx>{`
                 .rosebox-hover {
                     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
                 }
@@ -1778,7 +1778,7 @@ export function SplitText({
 
   return (
     <>
-      <style>{`
+      <style jsx>{`
               .SplitTextItem {
                   display: inline-block;
                   opacity: 0;
@@ -1905,7 +1905,7 @@ export function ShinyText({
 }) {
   return (
     <>
-      <style>{`
+      <style jsx>{`
               .shiny-text {
                   position: relative;
                   display: inline-block;
@@ -1965,7 +1965,7 @@ export function ShinyButton({
   };
   return (
     <>
-      <style>{`
+      <style jsx>{`
               .shiny-button {
                   position: relative;
                   display: inline-block;
@@ -2064,7 +2064,7 @@ export function WaveText({
 
   return (
     <>
-      <style>{`
+      <style jsx>{`
               .WaveTextItem {
                   display: inline-block;
                   opacity: 0;
@@ -2164,7 +2164,7 @@ export function AnimatedText({
 
   return (
     <>
-      <style>{`
+      <style jsx>{`
               .AnimatedTextItem {
                   display: inline-block;
                   ${selectedAnimation}
@@ -2224,7 +2224,7 @@ export const RoseRouter = ({ children, customStyles = "" }) => {
   }, []);
   return (
     <>
-      <style>{`
+      <style jsx>{`
                 .route {
                     opacity: 0;
                     transform: translateY(20px);
@@ -2289,7 +2289,7 @@ export const RoseParent = ({
 
   return (
     <>
-      <style>{`
+      <style jsx>{`
                 .rose-parent {
                     display: ${display};
                     ${isGrid
@@ -2417,7 +2417,7 @@ export function Notification({
 
   return (
     <>
-      <style>{`
+      <style jsx>{`
                 .${RoseName} {
           width: 20.625rem;
           height: 5rem; 
@@ -2586,7 +2586,7 @@ export function Spring({
 
   return (
     <>
-      <style>{`
+      <style jsx>{`
               .${RoseName} {
                   min-height: 7rem;
                   width: 7rem;
@@ -2692,7 +2692,7 @@ export function Variants({
 
   return (
     <>
-      <style>{`
+      <style jsx>{`
               .${RoseName} {
                   min-height: 7rem;
                   width: 7rem;
@@ -2831,7 +2831,7 @@ export function RandomAnimate({
 
   return (
     <>
-      <style>{`
+      <style jsx>{`
         .random-animate {
           display: inline-block;
         }
@@ -2987,7 +2987,7 @@ export function SideText({
 
   return (
     <>
-      <style>{`
+      <style jsx>{`
               .side-text {
                   display: inline-block;
               }
@@ -3201,7 +3201,7 @@ export function SideBox({ children, direction = 'left', edit = {}, RoseID, RoseN
 
   return (
     <>
-      <style>{`
+      <style jsx>{`
         .sideboxComponent {
           transition: transform 0.5s ease, opacity 0.5s ease;
           opacity: 0;
@@ -3509,25 +3509,53 @@ export const useGetContacts = () => {
   return { contacts, error, isFetching, getContacts };
 };
 
+export const SmoothParent = ({ children }) => {
+  const parentRef = useRef(null);
 
+  useEffect(() => {
+    const childElements = parentRef.current?.children;
 
-let CSS_PROPRTY_ROOT = () => {
+    if (childElements) {
+      Array.from(childElements).forEach((child, index) => {
+        child.style.opacity = 0;
+        child.style.transform = 'translateY(20px)';
+        child.style.transition = `opacity 0.5s ease ${index * 0.2}s, transform 0.5s ease ${index * 0.2}s`;
+
+        setTimeout(() => {
+          child.style.opacity = 1;
+          child.style.transform = 'translateY(0)';
+        }, 50);
+      });
+    }
+  }, [children]);
+
   return (
     <>
-      <style>{`
+      <style jsx>{`
+        .smooth-parent {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* space between child elements */
+}
 
-    @property --RoseMainColor {
-    syntax: "<color>";
-    inherits: false;
-    initial-value: #509af8;
-  }
-    @property --ShinyColor {
-    syntax: "<color>";
-    inherits: false;
-    initial-value: #111111;
-  }
+.smooth-parent > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
 
-  `}</style>
+`}</style>
+      <div className="smooth-parent" ref={parentRef}>
+        {children}
+      </div>
     </>
   );
 };
+
+
+// export let CSSCOLOR = {
+//   DefaultColor: "blue",
+//   fontWeight: "bold",
+//   fontSize:"1.1rem"
+// } 
+// soon
