@@ -5,6 +5,7 @@ import {
   ShinyText,
   usePreferredLanguage,
   WaveText,
+  SideText,
   useBatteryStatus,
   useColorScheme,
   RandomAnimate,
@@ -208,10 +209,10 @@ const ChatApp = () => {
               key={index}
               className={`message ${message.sender}`}
             >
-              <RandomAnimate edit={{ all: "none" }}>
+              <SideText direction="left">
                 {message.text}
                 {"  "}
-              </RandomAnimate>
+              </SideText>
               <div className="message-time"> {message.time}</div>
             </div>
           ))}
