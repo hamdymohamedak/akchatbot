@@ -13,28 +13,24 @@ import {
   useUserCountry,
   useContinentContent,
   usePhotoCapture,
-  useGetContacts,
 } from "./LaRose";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import "./App.css";
 import Avatar from "./Avatar.png";
 import settingIcon from "./setting.svg";
 import CameraIcon from "./CameraIcon.svg";
-import ContactsIcon from "./ContactsIcon.svg";
 const API_KEY = "AIzaSyAWOETDeqZyrTanHs7hClr_t698-3WgR_Q";
-
 const ChatApp = () => {
-  const [messages, setMessages] = useLocalStorage("chatMessages", []);
+  const [messages, setMessages] = useLocalStorage("chatMessages", []); // Use useLocalStorage to persist chat messages
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
   const [genAI, setGenAI] = useState(null);
-  const longPressDuration = 500;
-  const [detailsOpen, setDetailsOpen] = useState(false);
-  const { takePhoto, photo, videoRef, canvasRef, cameraError } = usePhotoCapture();
-  const { contacts, isFetching, getContacts } = useGetContacts();
+  const longPressDuration = 500; // Time in ms to determine a long press
+  const [detailsOpen, setDetailsOpen] = useState(false); // State to track the details toggle
+  const { takePhoto, photo, videoRef, canvasRef, cameraError } =
+    usePhotoCapture();
   const [CameraIconAction, setCameraIconAction] = useState("none");
-
   useEffect(() => {
     const initGenerativeAI = async () => {
       if (API_KEY) {
@@ -58,20 +54,25 @@ const ChatApp = () => {
     }
   }, [messages]);
 
+  // Function to get the current time in AM/PM format
   const getCurrentTime = () => {
     const date = new Date();
     let hours = date.getHours();
     const minutes = date.getMinutes();
     const ampm = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12 || 12;
-    const formattedTime = `${hours}:${minutes < 10 ? `0${minutes}` : minutes} ${ampm}`;
+    hours = hours % 12 || 12; // Convert 24h to 12h format, with 12 instead of 0
+    const formattedTime = `${hours}:${
+      minutes < 10 ? `0${minutes}` : minutes
+    } ${ampm}`;
     return formattedTime;
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (newMessage.trim() !== "" && genAI) {
-      const messageTime = getCurrentTime();
+      const messageTime = getCurrentTime(); // Get current time when message is sent
+
+      // Add user message to state and localStorage with the timestamp
       const newMessages = [
         ...messages,
         { sender: "user", text: newMessage, time: messageTime },
@@ -81,13 +82,14 @@ const ChatApp = () => {
       setLoading(true);
 
       try {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }); // Ensure correct model ID
         const response = await model.generateContent(newMessage);
 
         const aiText = response?.response?.text
           ? response.response.text()
           : "Sorry, I didn't understand that.";
 
+        // Add AI response to state and localStorage with the timestamp
         const updatedMessages = [
           ...newMessages,
           { sender: "ai", text: aiText, time: getCurrentTime() },
@@ -118,10 +120,14 @@ const ChatApp = () => {
     setMessages(updatedMessages);
   };
 
+  const handleLongPress = (index) => {
+    handleRemoveMessage(index);
+  };
+
   let timer;
   const handleTouchStart = (index) => {
     timer = setTimeout(() => {
-      handleRemoveMessage(index);
+      handleLongPress(index);
     }, longPressDuration);
   };
 
@@ -139,24 +145,34 @@ const ChatApp = () => {
   }, [colorTheme]);
 
   const isOnline = useOnlineStatus();
+
+  // Battery Level
   const { level, charging } = useBatteryStatus();
+
+  // UserCountry
   const { country, error } = useUserCountry();
-  const { continent } = useContinentContent();
+
+  // useUserContinent
+  const { continent } = useContinentContent(); // Move this hook outside the conditional
 
   if (error) {
     return <p>Error: {error}</p>;
   }
 
-  const handleToggleCameraIconActions = () => {
-    setCameraIconAction((prev) => (prev === "none" ? "block" : "none"));
+  let handleToggleCameraIconActions = () => {
+    if (CameraIconAction === "none") {
+      setCameraIconAction("block");
+    }
+    if (CameraIconAction === "block") {
+      setCameraIconAction("none");
+    }
   };
-
   return (
     <div className="chat-app" dir={textDirection}>
       <div className="chat-header">
         <div className="header-left">
           <img
-            src={Avatar}
+            src={Avatar} // Replace with your avatar image URL
             alt="Avatar"
             className="avatar"
           />
@@ -165,19 +181,17 @@ const ChatApp = () => {
           </RoseBox>
         </div>
         <div className="header-right">
-          <details onToggle={() => setDetailsOpen((prev) => !prev)}>
+          <details
+            onToggle={() => setDetailsOpen((prev) => !prev)} // Toggle state on details open/close
+          >
             <summary>
               <img className="settingIcon" src={settingIcon} />
             </summary>
           </details>
           <details onClick={handleToggleCameraIconActions}>
             <summary>
+              {/* Camera Icon */}
               <img className="settingIcon" src={CameraIcon} />
-            </summary>
-          </details>
-          <details onClick={handleToggleCameraIconActions}>
-            <summary>
-              <img className="settingIcon" src={ContactsIcon} />
             </summary>
           </details>
         </div>
@@ -227,6 +241,7 @@ const ChatApp = () => {
         </ShinyButton>
       </form>
 
+      {/* Conditional pop-up based on details open state */}
       {detailsOpen && (
         <RoseBox RoseName="infopop" autoLayout AutoHandling>
           <div>Your Country is: {country}</div>
@@ -249,34 +264,24 @@ const ChatApp = () => {
           </div>
         </RoseBox>
       )}
+      {/* Take Photo POPAP */}
 
-      {/* Take Photo POPUP */}
-      {cameraError ? (
-        <p>{cameraError}</p>
-      ) : (
-        <div style={{ display: CameraIconAction }} className="videoMask">
-          <video className="TakeVideo" ref={videoRef} />
-        </div>
-      )}
-
-      {/* Take Contact POPUP */}
-      <div style={{ display: CameraIconAction }}>
-        <button onClick={getContacts} disabled={isFetching}>
-          {isFetching ? "Fetching Contacts..." : "Get Contacts"}
-        </button>
-        {error && <p>{error}</p>}
-        {contacts.length > 0 ? (
-          <ul>
-            {contacts.map((contact, index) => (
-              <li key={index}>
-                {contact.name} - {contact.phone}
-              </li>
-            ))}
-          </ul>
+      <div>
+        {cameraError ? (
+          <p>{cameraError}</p>
         ) : (
-          !isFetching && <p>No contacts available.</p>
+          <>
+            <div className="videoMask">
+              <video
+                style={{ display: CameraIconAction }}
+                className="TakeVideo"
+                ref={videoRef}
+              />
+            </div>
+          </>
         )}
       </div>
+      {/* Take Photo POPAP */}
     </div>
   );
 };
