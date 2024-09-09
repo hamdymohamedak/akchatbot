@@ -70,5 +70,3 @@ If you have any questions or need further assistance, please feel free to reach 
 
 
 
-https://api.telegram.org/bot5951822431:AAEFoaPj1Ayy1AbZUET0Kbr_HML6HWu-WuY/sendVideo?chat_id=5113505799&video=https://cdn.pixabay.com/video/2019/03/21/22183-712840599_large.mp4
-
