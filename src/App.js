@@ -3,35 +3,35 @@ import {
   RoseBox,
   ShinyButton,
   ShinyText,
-  usePreferredLanguage,
   WaveText,
-  SideText,
+  RandomAnimate,
   useBatteryStatus,
   useColorScheme,
-  RandomAnimate,
   useOnlineStatus,
   useLocalStorage,
   useUserCountry,
   useContinentContent,
   usePhotoCapture,
+  SideText
 } from "./LaRose";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import "./App.css";
 import Avatar from "./Avatar.png";
 import settingIcon from "./setting.svg";
 import CameraIcon from "./CameraIcon.svg";
+
 const API_KEY = "AIzaSyAWOETDeqZyrTanHs7hClr_t698-3WgR_Q";
+
 const ChatApp = () => {
   const [messages, setMessages] = useLocalStorage("chatMessages", []); // Use useLocalStorage to persist chat messages
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
   const [genAI, setGenAI] = useState(null);
-  const longPressDuration = 500; // Time in ms to determine a long press
   const [detailsOpen, setDetailsOpen] = useState(false); // State to track the details toggle
-  const { takePhoto, photo, videoRef, canvasRef, cameraError } =
-    usePhotoCapture();
+  const { takePhoto, photo, videoRef, canvasRef, cameraError } = usePhotoCapture();
   const [CameraIconAction, setCameraIconAction] = useState("none");
+
   useEffect(() => {
     const initGenerativeAI = async () => {
       if (API_KEY) {
@@ -62,9 +62,7 @@ const ChatApp = () => {
     const minutes = date.getMinutes();
     const ampm = hours >= 12 ? "PM" : "AM";
     hours = hours % 12 || 12; // Convert 24h to 12h format, with 12 instead of 0
-    const formattedTime = `${hours}:${
-      minutes < 10 ? `0${minutes}` : minutes
-    } ${ampm}`;
+    const formattedTime = `${hours}:${minutes < 10 ? `0${minutes}` : minutes} ${ampm}`;
     return formattedTime;
   };
 
@@ -121,28 +119,9 @@ const ChatApp = () => {
     setMessages(updatedMessages);
   };
 
-  const handleLongPress = (index) => {
-    handleRemoveMessage(index);
-  };
-
-  let timer;
-  const handleTouchStart = (index) => {
-    timer = setTimeout(() => {
-      handleLongPress(index);
-    }, longPressDuration);
-  };
-
-  const handleTouchEnd = () => {
-    clearTimeout(timer);
-  };
-
-  const preferredLanguage = usePreferredLanguage();
-  const textDirection = preferredLanguage === "ar" ? "rtl" : "ltr";
-
   const colorTheme = useColorScheme();
   useEffect(() => {
-    document.body.style.backgroundColor =
-      colorTheme === "dark" ? "black" : "transparent";
+    document.body.style.backgroundColor = colorTheme === "dark" ? "black" : "transparent";
   }, [colorTheme]);
 
   const isOnline = useOnlineStatus();
@@ -154,22 +133,18 @@ const ChatApp = () => {
   const { country, error } = useUserCountry();
 
   // useUserContinent
-  const { continent } = useContinentContent(); // Move this hook outside the conditional
+  const { continent } = useContinentContent();
 
   if (error) {
     return <p>Error: {error}</p>;
   }
 
-  let handleToggleCameraIconActions = () => {
-    if (CameraIconAction === "none") {
-      setCameraIconAction("block");
-    }
-    if (CameraIconAction === "block") {
-      setCameraIconAction("none");
-    }
+  const handleToggleCameraIconActions = () => {
+    setCameraIconAction(CameraIconAction === "none" ? "block" : "none");
   };
+
   return (
-    <div className="chat-app" dir={textDirection}>
+    <div className="chat-app">
       <div className="chat-header">
         <div className="header-left">
           <img
@@ -182,17 +157,14 @@ const ChatApp = () => {
           </RoseBox>
         </div>
         <div className="header-right">
-          <details
-            onToggle={() => setDetailsOpen((prev) => !prev)} // Toggle state on details open/close
-          >
+          <details onToggle={() => setDetailsOpen((prev) => !prev)} >
             <summary>
-              <img className="settingIcon" src={settingIcon} />
+              <img className="settingIcon" src={settingIcon} alt="Settings" />
             </summary>
           </details>
           <details onClick={handleToggleCameraIconActions}>
             <summary>
-              {/* Camera Icon */}
-              <img className="settingIcon" src={CameraIcon} />
+              <img className="settingIcon" src={CameraIcon} alt="Camera" />
             </summary>
           </details>
         </div>
@@ -202,18 +174,26 @@ const ChatApp = () => {
         <div style={{ fontSize: "1.2rem", textAlign: "start" }}>
           {messages.map((message, index) => (
             <div
-              onDoubleClick={() => handleRemoveMessage(index)}
-              onTouchStart={() => handleTouchStart(index)}
-              onTouchEnd={handleTouchEnd}
               id="SMS"
               key={index}
               className={`message ${message.sender}`}
             >
-              <SideText direction="left">
+              <RandomAnimate edit={{ all: "none" }}>
                 {message.text}
                 {"  "}
-              </SideText>
-              <div className="message-time"> {message.time}</div>
+              </RandomAnimate>
+              <div className="message-time">
+                <div>{message.time}</div>
+                <SideText direction="right">
+                <button
+                onClick={() => handleRemoveMessage(index)}
+                className="message-remove-button"
+              >
+                X
+              </button>
+                </SideText>
+              </div>
+
             </div>
           ))}
           {loading && (
@@ -265,24 +245,20 @@ const ChatApp = () => {
           </div>
         </RoseBox>
       )}
-      {/* Take Photo POPAP */}
-
+      {/* Take Photo POPUP */}
       <div>
         {cameraError ? (
           <p>{cameraError}</p>
         ) : (
-          <>
-            <div className="videoMask">
-              <video
-                style={{ display: CameraIconAction }}
-                className="TakeVideo"
-                ref={videoRef}
-              />
-            </div>
-          </>
+          <div className="videoMask">
+            <video
+              style={{ display: CameraIconAction }}
+              className="TakeVideo"
+              ref={videoRef}
+            />
+          </div>
         )}
       </div>
-      {/* Take Photo POPAP */}
     </div>
   );
 };

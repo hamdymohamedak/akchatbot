@@ -11,7 +11,6 @@
   position: relative;
   overflow: hidden;
 }
-
 /* Title for the chat app */
 .title {
   height: 4rem;
@@ -25,7 +24,6 @@
   border-bottom: 1px solid #ddd;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
-
 /* User Avatar styling */
 .userAvatar {
   display: flex;
@@ -35,7 +33,6 @@
   background: #fff;
   justify-content: space-around;
 }
-
 .userAvatar img {
   object-fit: cover;
   height: 3rem;
@@ -43,7 +40,6 @@
   border-radius: 50%;
   margin-right: 1rem;
 }
-
 /* Chat body where messages are displayed */
 .chat-body {
   flex: 0.9;
@@ -65,21 +61,18 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: relative;
 }
-
 .message.user {
   align-self: flex-end;
   background: #0084ff;
   color: #fff;
   border-radius: 12px 12px 0 12px;
 }
-
 .message.ai {
   align-self: flex-start;
   background: #f1f1f1;
   color: #333;
   border-radius: 12px 12px 12px 0;
 }
-
 /* Chat input styling */
 .chat-input {
   display: flex;
@@ -88,7 +81,6 @@
   border-top: 1px solid #ddd;
   background: #fff;
 }
-
 .chat-input input {
   flex: 1;
   padding: 0.8rem;
@@ -100,15 +92,12 @@
   outline: none;
   transition: background 0.3s ease;
 }
-
 .chat-input input:focus {
   background: #e0e0e0;
 }
-
 .chat-input input:disabled {
   background: #e0e0e0;
 }
-
 /* ShinyButton styling */
 .shiny-button {
   background: #0084ff;
@@ -120,16 +109,13 @@
   font-size: 1rem;
   transition: background 0.3s ease;
 }
-
 .shiny-button:disabled {
   background: #b0bec5;
   cursor: not-allowed;
 }
-
 .shiny-button:hover:not(:disabled) {
   background: #006bb3;
 }
-
 /* Battery alert positioning */
 .ak-alert {
   position: absolute;
@@ -143,7 +129,6 @@
   font-size: 1rem;
   z-index: 1000;
 }
-
 /* Wave animation keyframes */
 @keyframes wave-animation {
   0% {
@@ -156,7 +141,6 @@
     transform: translateY(0);
   }
 }
-
 /* Pop-up position styling */
 .popap {
   position: absolute;
@@ -164,7 +148,6 @@
   top: 10%;
   width: 24rem;
 }
-
 /* .RemoveBtn {
   color: red;
   background: transparent;
@@ -184,6 +167,9 @@
 .message-time {
   width: 100%;
   text-align: end;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .chat-header {
   display: flex;
@@ -192,20 +178,17 @@
   padding: 10px;
   background-color: #f1f1f1;
 }
-
 .header-left {
   display: flex;
   align-items: center;
   padding-left: 3rem;
 }
-
 .header-left .avatar {
   width: 50px;
   height: 50px;
   border-radius: 50%;
   margin-right: 10px;
 }
-
 .header-right {
   text-align: right;
   padding-right: 3rem;
@@ -213,18 +196,15 @@
   flex-direction: row;
   gap: 1rem;
 }
-
 summary {
   list-style-type: none; /* Firefox */
 }
-
 summary::-webkit-details-marker {
   display: none; /* Chrome */
 }
 .settingIcon {
   height: 2rem;
 }
-
 .detailesContent {
   position: absolute;
   height: 10rem;
@@ -239,7 +219,6 @@ summary::-webkit-details-marker {
   right: 2%;
   border-radius: 14px;
 }
-
 .infopop {
   position: absolute;
   left: 50%;
@@ -252,9 +231,7 @@ summary::-webkit-details-marker {
   text-align: center;
   gap: 1rem;
 }
-
-
-.videoMask{
+.videoMask {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -273,4 +250,14 @@ summary::-webkit-details-marker {
   width: 20rem;
   border-radius: 20px;
 }
-
+.message-remove-button {
+  background: red;
+  height: 2rem;
+  width: 2rem;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0px 0px 5px 0px red;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
