@@ -1,4 +1,4 @@
-// LaRose is a Library was built with "Hamdy Mohamed Askander"
+// Magia is a Library was built with "Hamdy Mohamed Askander"
 // for More Visit => https://askander.vercel.app
 // Happy Hacking (˶ˆᗜˆ˵)
 import React, {
@@ -1588,14 +1588,14 @@ export function IconsGroup({
     </>
   );
 }
-export function LaRoseText({
+export function MagiaText({
   edit = {},
   children,
   fontSize = 2,
   fontWeight = 600,
   gradientText = "linear-gradient(45deg, #ff007f, #ff00ff, #ff1493, #ff69b4, #ff69b4, #ff1493, #ff00ff, #ff007f)",
 }) {
-  let LaRoseText = {
+  let MagiaText = {
     ...edit,
   };
   return (
@@ -1611,7 +1611,7 @@ export function LaRoseText({
           text-fill-color: transparent;
         }
       `}</style>
-      <div style={LaRoseText} className="title">
+      <div style={MagiaText} className="title">
         {children}
       </div>
     </>
@@ -2387,7 +2387,7 @@ export function Notification({
     </svg>
   ),
   RoseName = "card",
-  Message = "Hello LaRose Devs",
+  Message = "Hello Magia Devs",
   MessageColor = "white",
   DesMessage = "success",
   DesMessageColor = "white",
@@ -2595,7 +2595,7 @@ export function Spring({
                   display: flex;
                   justify-content: center;
                   align-items: center;
-                  animation: LaRoseRotatingAnimated ${speed}s ease-in-out forwards;
+                  animation: MagiaRotatingAnimated ${speed}s ease-in-out forwards;
                   transform: rotate(0deg) scale(0);
                   opacity: 0;
                   overflow: hidden;
@@ -2608,7 +2608,7 @@ export function Spring({
                   cursor: ${drag ? "grabbing" : "default"};
               }
 
-              @keyframes LaRoseRotatingAnimated {
+              @keyframes MagiaRotatingAnimated {
                   to {
                                     translate: ${x} ${y} ${z};
                       transform: rotate(${rotate}deg) scale(${scale});
@@ -2978,7 +2978,7 @@ export function RandomAnimate({
 export function SideText({
   children,
   RoseID,
-  RoseName = "side-textAnimatedLarose",
+  RoseName = "side-textAnimatedMagia",
   edit = {},
   direction = "left", // Default direction is 'left'
 }) {
