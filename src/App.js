@@ -1,4 +1,3 @@
-import React, { useState, useRef, useEffect } from "react";
 import {
   RoseBox,
   ShinyButton,
@@ -13,7 +12,9 @@ import {
   useContinentContent,
   usePhotoCapture,
   SideText,
-} from "./LaRose";
+  Image,
+} from "larose-js";
+import React, { useState, useRef, useEffect } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import "./App.css";
 import Avatar from "./Magia.jpg";
@@ -128,11 +129,7 @@ const ChatApp = () => {
     <div className="chat-app">
       <div className="chat-header">
         <div className="header-left">
-          <img
-            src={Avatar} // Replace with your avatar image URL
-            alt="Avatar"
-            className="avatar"
-          />
+          <Image height={200} width={200} loading src={Avatar} alt="Avatar" RoseName="avatar" />
           <RoseBox edit={{ color: "black", fontWeight: "bold" }}>
             Magia ChatBot <span>{isOnline ? " Online " : " Offline "}</span>
           </RoseBox>
@@ -140,12 +137,12 @@ const ChatApp = () => {
         <div className="header-right">
           <details onToggle={() => setDetailsOpen((prev) => !prev)}>
             <summary>
-              <img className="settingIcon" src={settingIcon} alt="Settings" />
+              <Image loading RoseName="settingIcon" src={settingIcon} />
             </summary>
           </details>
           <details onClick={handleToggleCameraIconActions}>
             <summary>
-              <img className="settingIcon" src={CameraIcon} alt="Camera" />
+              <Image loading RoseName="settingIcon" src={CameraIcon} />
             </summary>
           </details>
         </div>
